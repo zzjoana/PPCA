@@ -8,7 +8,7 @@ except ImportError:
 
 import numpy as np
 import os
-from scipy.misc import imread
+# from scipy.misc import imread
 import math
 from scipy.spatial import distance
 
