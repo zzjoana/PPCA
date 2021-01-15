@@ -80,7 +80,7 @@ class PPCA(object):
 		#         (DxL   *   L*N).T = NxD    +  Dx1
 		# W.dot( np.linalg.inv((W.T).dot(W)) ).dot(M).dot(latent_data.T).T +mu
 		M = np.transpose(self.W).dot(self.W) + self.sigma * np.eye(self.L)
-		return self.W.dot( np.linalg.inv((self.W.T).dot(self.W)) ).dot(M).dot(data.T).T +self.mu
+		return self.W.dot(np.linalg.inv((self.W.T).dot(self.W))).dot(M).dot(data.T).T +self.mu
 	
 	# EM algorithm finds the model parameters W, and sigma^2
 	def expectation_maximization(self):
@@ -114,8 +114,11 @@ class PPCA(object):
 			sigmaNew = np.absolute(sigmaNew)
 			W = Wnew
 			sigma = sigmaNew
+			print("W:\n",W)
+			print("sigma:\n",sigma)
 		self.W = W
 		self.sigma = sigma
+
 
 
 

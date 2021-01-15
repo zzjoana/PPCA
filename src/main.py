@@ -22,7 +22,7 @@ N = 50  # this is our number of dimensions
 num_points = 1000
 s = 1 / 8  # parameter for the stationary random covatiance matrix
 
-# generate data by sampling from N dimansional Gaussian
+# generate data by sampling from N dimensional Gaussian
 data = generate_multivariate(N, s, num_points)
 
 # visualize covariance and precision of the data
@@ -79,11 +79,12 @@ plt.show()
 # Do PPCA on multivariate gaussian set
 ##data_train, data_test = train_test_split(data, test_size=0.2, random_state=148007482)
 data_train, data_test = train_test_split(data, test_size=0.2)
-ppca = PPCA(latent_dim=mult_pca_components, max_iter=50)
+ppca = PPCA(latent_dim=10, max_iter=50)#隐变量维度的确定？？
 
 data_std = ppca.fit(data_train)
 data_reduced = ppca.transform_data(data_std)
-data_reconstructed = ppca.inverse_transform(data_reduced)
+
+data_reconstructed = ppca.inverse_transform(data_reduced)# to draw the error figure
 
 reconstruction_error_relative = get_relative_error(data_train, data_reconstructed, (int)(num_points * 0.8))
 r = range(0, (int)(num_points * 0.8))
