@@ -17,7 +17,7 @@ class MPPCA(object):
         self.W = None
         # maximum iterations to do
         self.max_iter = max_iter
-        # X D*N
+        # X NxD
         self.X = None
         self.init = False
 
@@ -26,6 +26,7 @@ class MPPCA(object):
         if not self.init:
             # mean of each row
             mean = np.mean(data, axis=0)
+            print("dtype:", mean.dtype)
             self.mu = np.mat(mean)
             # print("mu:\n", self.mu)
             # print(self.mu.shape)

@@ -50,8 +50,9 @@ N = 5
 s = 1 / 8
 # generate data by sampling from N dimensional Gaussian
 data = generate_multivariate(D, s, N)
+# data is N*D
 print("data_orig:\n", data)
-# split the data into training and validation sets
+
 
 mppca = MPPCA(latent_dim=2, sigma2=1, max_iter=50)
 mppca.fit(data)

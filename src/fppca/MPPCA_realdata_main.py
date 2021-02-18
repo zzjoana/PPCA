@@ -7,6 +7,7 @@ from src.fppca.MPPCA import MPPCA
 iris_data = load_iris()
 x_data = iris_data.data
 y_data = iris_data.target
+# data is 150*4
 N = x_data.shape[0]
 print('N:', N)
 print(x_data.shape)
