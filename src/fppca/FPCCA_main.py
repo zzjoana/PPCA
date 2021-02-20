@@ -25,5 +25,5 @@ print("shape: ", data_XS_b.shape)
 data_XR_b = np.mat([[4, 6, 7], [5, 9, 8]])
 weights_b = np.array([1, 2])
 
-fppca = FPPCA(latent_dim=2, sigma2=1, max_iter=10, NR_b=NR_b, muS=muS, muR=muR)
+fppca = FPPCA(P=2, sigma2=1, max_iter=10, NR_b=NR_b, muS=muS, muR=muR)
 fppca.fit(data_XS_b, data_XR_b)
