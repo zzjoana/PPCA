@@ -2,7 +2,7 @@ from sklearn.datasets import load_iris
 import matplotlib.pyplot as plt
 import numpy as np
 
-from src.fppca.MPPCA import MPPCA
+from src.fppca.MPPCA_init import MPPCA_IN
 
 iris_data = load_iris()
 x_data = iris_data.data
@@ -12,7 +12,7 @@ N = x_data.shape[0]
 print('N:', N)
 print(x_data.shape)
 
-mppca = MPPCA(latent_dim=2, sigma2=1, max_iter=20)
+mppca = MPPCA_IN(P=2, Sigma=1, max_iter=20)
 mppca.fit(x_data)
 data_reduced = mppca.transform_data(x_data)
 data_reduced_T = data_reduced.T

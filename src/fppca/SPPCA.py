@@ -1,7 +1,7 @@
 import numpy as np
 
 
-class MPPCA(object):
+class SPPCA(object):
     def __init__(self, P, W, Sigma, D, mu):
         # P = dimensionality of the latent variable
         self.P = P

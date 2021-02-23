@@ -5,7 +5,7 @@ from sklearn.model_selection import train_test_split
 import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
 
-from src.fppca.MPPCA import MPPCA
+from src.fppca.MPPCA_init import MPPCA_IN
 
 
 def generate_multivariate(Dim, s, num_points):
@@ -54,10 +54,10 @@ data = generate_multivariate(D, s, N)
 print("data_orig:\n", data)
 
 
-mppca = MPPCA(latent_dim=2, sigma2=1, max_iter=50)
+mppca = MPPCA_IN(P=2, Sigma=1, max_iter=50)
 mppca.fit(data)
 print("W_final:\n", mppca.W)
-print("sigma2_final:\n", mppca.sigma2)
+print("sigma2_final:\n", mppca.Sigma)
 # data_reduced: PXN
 data_reduced = mppca.transform_data(data)
 data_reduced_T = data_reduced.T
