@@ -53,7 +53,7 @@ class FPPCA(object):
  # fit the variables need data
     def fit(self, data_XS_b_FK, data_XR_b):
             # print("fit data")
-            FK_b = np.array(np.squeeze(data_XS_b_FK[:, 4]))
+            FK_b = np.array(np.squeeze(data_XS_b_FK[:, 3]))
             # print("FK_b:\n", FK_b)
             # in each batch how many tuples matching one RID order
             key = np.unique(FK_b)
@@ -66,7 +66,7 @@ class FPPCA(object):
             # print("matching_cnt:\n", matching_cnt)
             self.matching_cnt = matching_cnt
 
-            data_XS_b = data_XS_b_FK[:, 0:4]
+            data_XS_b = data_XS_b_FK[:, 0:3]
             self.XS_b = data_XS_b
             # print('XS_b:\n', self.XS_b)
             self.XR_b = data_XR_b
@@ -81,10 +81,14 @@ class FPPCA(object):
 
         # print("Calculate_E_W")
         muS = self.muS
+        # print("muS", muS)
         muR = self.muR
+        # print("muR", muR)
         P = self.P
         XS_b = self.XS_b
+        # print("XS_b", XS_b)
         XR_b = self.XR_b
+        # print("XR_b", XR_b)
         # print("XR_b:", XR_b.shape)
         NS_b = self.NS_b
         NR_b = self.NR_b
@@ -108,7 +112,7 @@ class FPPCA(object):
 
         ns = 0
         for nr in range(NR_b):
-            # print("nr:", nr)
+            print("nr:", nr)
             # DR x 1 XR_b_mu[:, [nr]] can be used repeatedly
             XR_b_mu[:, [nr]] = (XR_b[[nr], :] - muR).T
             # print("XR_b_mu[", nr, "]:\n", XR_b_mu[:, [nr]])
@@ -135,7 +139,8 @@ class FPPCA(object):
                 # print("W_b_p1[[ns], :, :]:\n", W_b_p1[[ns], :, :].shape)
                 # print("W_b_p1[[", ns, "] :, :]:\n", W_b_p1[[ns], :, :])
                 ns = ns + 1
-
+            # print("ExpZ_b:\n", ExpZ_b, ExpZ_b.shape)
+            # print("ExpZZT_b:\n", ExpZZT_b)
         #print(NS_b == ns)
         # print("XR_b_mu:\n", XR_b_mu, XR_b_mu.shape)
         # print("XS_b_mu:\n", XS_b_mu, XS_b_mu.shape)
@@ -151,6 +156,8 @@ class FPPCA(object):
         # print("W_b_p1_sum:\n", W_b_p1_sum, W_b_p1_sum.shape)
         # print("W_b_p2_sum:\n", W_b_p2_sum, W_b_p2_sum.shape)
         # print("ns:", ns)
+        # print("W_b_p1_sum:\n", W_b_p1_sum)
+        # print("W_b_p2_sum:\n", W_b_p2_sum)
         return W_b_p1_sum, W_b_p2_sum
 
     def calculate_Sigma2(self, Wnew):
@@ -225,13 +232,12 @@ class FPPCA(object):
 
                 ns = ns + 1
             nr = nr + 1
-            # print("Sigma_b_p1", Sigma_b_p1)
         # print(NS_b == ns)
         Sigma_b_p1_sum = np.sum(Sigma_b_p1, axis=1)
         print("Sigma_b_p1_sum", Sigma_b_p1_sum, Sigma_b_p1_sum.shape)
         Sigma_b_p2_sum = np.sum(Sigma_b_p2, axis=1)
-        print("Sigma_b_p2_sum", Sigma_b_p2_sum, Sigma_b_p2_sum.shape)
+        # print("Sigma_b_p2_sum", Sigma_b_p2_sum, Sigma_b_p2_sum.shape)
         Sigma_b_p3_sum = np.sum(Sigma_b_p3, axis=1)
-        print("Sigma_b_p3_sum", Sigma_b_p3_sum, Sigma_b_p3_sum.shape)
+        # print("Sigma_b_p3_sum", Sigma_b_p3_sum, Sigma_b_p3_sum.shape)
         return Sigma_b_p1_sum, Sigma_b_p2_sum, Sigma_b_p3_sum
 

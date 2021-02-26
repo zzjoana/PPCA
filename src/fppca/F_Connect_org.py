@@ -1,6 +1,6 @@
 import time
 from math import ceil
-from src.fppca.FPPCA import FPPCA
+from src.fppca.F_org import FPPCA
 
 import numpy as np
 import psycopg2
@@ -22,7 +22,7 @@ def fetch_count_mu():
     cursor.close()
 
     cursor = conn.cursor()
-    sql_muS = """select avg("SID"), avg("XS1"), avg("XS2"), avg("XS3") from "S";"""
+    sql_muS = """select avg("SID"), avg("XS1"), avg("XS2") from "S";"""
     cursor.execute(sql_muS)
     # fetchone return a tuple
     muS_tuple = cursor.fetchone()
@@ -39,9 +39,7 @@ def fetch_count_mu():
     cursor.close()
 
     cursor = conn.cursor()
-    sql_sumR = """select sum("R"."RID" * tmp.CNT),sum("R"."XR1" * tmp.CNT), sum("R"."XR2" * tmp.CNT),
-    sum("R"."XR3" * tmp.CNT),sum("R"."XR4" * tmp.CNT),sum("R"."XR5" * tmp.CNT),sum("R"."XR6" * tmp.CNT),
-    sum("R"."XR7" * tmp.CNT),sum("R"."XR8" * tmp.CNT)
+    sql_sumR = """select sum("R"."RID" * tmp.CNT),sum("R"."XR1" * tmp.CNT), sum("R"."XR2" * tmp.CNT)
     from "R"join (select "S"."FK", count(*) as CNT from "S" GROUP BY "S"."FK") as tmp
                       on "R"."RID" = tmp."FK";"""
     cursor.execute(sql_sumR)
@@ -56,7 +54,6 @@ def fetch_count_mu():
 
 
 def fetch_data(cursorR, sql_S):
-    runtime_start_fetch = time.time()
     R_b_list = cursorR.fetchmany(NR_b)
     R_b_array = np.array(R_b_list)
     data_XR_b = np.mat(R_b_list)
@@ -70,8 +67,6 @@ def fetch_data(cursorR, sql_S):
     data_XS_b_FK = np.mat(S_b_list)
     # print("data_XS_b_FK:\n", data_XS_b_FK, type(data_XS_b_FK))
     cursorS.close()
-    runtime_end_fetch = time.time()
-    print("runtime of fetch data:", (runtime_end_fetch - runtime_start_fetch))
     return data_XR_b, data_XS_b_FK
 
 
@@ -94,7 +89,6 @@ def iterate_and_calculate(W, Sigma, max_iter):
         W_p2_sum = np.zeros((P, P))
         batch_num = 1
         while batch_num <= total_batch:
-            runtime_start_batch = time.time()
             data_XR_b, data_XS_b_FK = fetch_data(cursorR,  sql_S)
             # print("data_XR_b:", data_XR_b.shape)
             fppca.fit(data_XS_b_FK, data_XR_b)
@@ -103,8 +97,6 @@ def iterate_and_calculate(W, Sigma, max_iter):
             W_p1_sum = W_p1_sum + W_b_p1_sum
             W_p2_sum = W_p2_sum + W_b_p2_sum
             batch_num += 1
-            runtime_end_batch = time.time()
-            print("runtime of this batch:", (runtime_end_batch - runtime_start_batch))
         Wnew = W_p1_sum.dot(np.linalg.inv(W_p2_sum))
         # print("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!Wnew:\n", Wnew, Wnew.shape)
         cursorR.close()
@@ -117,7 +109,6 @@ def iterate_and_calculate(W, Sigma, max_iter):
         Sigma_p3_sum = 0
         batch_num = 1
         while batch_num <= total_batch:
-
             data_XR_b, data_XS_b_FK = fetch_data(cursorR, sql_S)
             fppca.fit(data_XS_b_FK, data_XR_b)
             # print("########################################calculate Sigma for batch_num:", batch_num)
@@ -126,7 +117,6 @@ def iterate_and_calculate(W, Sigma, max_iter):
             Sigma_p2_sum = Sigma_p2_sum + Sigma_b_p2_sum
             Sigma_p3_sum = Sigma_p3_sum + Sigma_b_p3_sum
             batch_num += 1
-
         # print("Sigma_p1_sum:", Sigma_p1_sum)
         # print("Sigma_p2_sum:", Sigma_p2_sum)
         # print("Sigma_p3_sum:", Sigma_p3_sum)
@@ -140,20 +130,20 @@ def iterate_and_calculate(W, Sigma, max_iter):
 runtime_start = time.time()
 cpu_start = time.process_time()
 
-conn = psycopg2.connect(database="realdataWalmart", user="postgres", password="123456", host="localhost", port="5432")
+conn = psycopg2.connect(database="F-test", user="postgres", password="123456", host="localhost", port="5432")
 NR, NS, muR, muS = fetch_count_mu()
 # print("NR:", NR)
 # print("NS:", NS)
 # print("muR:\n", muR)
 # print("muS:\n", muS, muS.dtype)
 
-NR_b = 300
+NR_b = 2
 total_batch = ceil(NR / NR_b)
 # print("total_batch:", total_batch)
 P = 2
-D = 13
-DS = 4
-DR = 9
+D = 6
+DS = 3
+DR = 3
 np.random.seed(2)
 W = np.random.rand(D, P)
 # print('W_init:\n', W)
@@ -164,5 +154,5 @@ conn.close()
 
 runtime_end = time.time()
 cpu_end = time.process_time()
-print("runtime of FPPCA:", (runtime_end - runtime_start))
-print("cpu of FPPCA:", (cpu_end - cpu_start))
+print("runtime of org:", (runtime_end - runtime_start))
+print("cpu of org:", (cpu_end - cpu_start))

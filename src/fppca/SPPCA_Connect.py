@@ -24,7 +24,8 @@ def fetch_count_mu():
     cursor.close()
 
     cursor = conn.cursor()
-    sql_mu = """select avg("SID"), avg("XS1"), avg("XS2"), avg("RID"),avg("XR1"), avg("XR2") from
+    sql_mu = """select avg("SID"), avg("XS1"), avg("XS2"),avg("XS3"), avg("RID"),avg("XR1"), avg("XR2"), 
+    avg("XR3"), avg("XR4"), avg("XR5"), avg("XR6"), avg("XR7"), avg("XR8") from
                 (select * from "S" join "R" on "S"."FK"= "R"."RID") as tmp;"""
     cursor.execute(sql_mu)
     mu_tuple = cursor.fetchone()
@@ -51,8 +52,8 @@ def fetch_data(cursorR, sql_b):
 
 def iterate_and_calculate(W, Sigma, max_iter):
     sql_R = """select * from "R" order by "RID";"""
-    sql_b = """select "SID", "XS1", "XS2", "RID", "XR1", "XR2"  from "S" join (select * from "R" where "R"."RID" in %s ) as tmp
-              on "S"."FK"= tmp."RID";"""
+    sql_b = """select "SID", "XS1", "XS2","XS3", "RID", "XR1", "XR2", "XR3", "XR4", "XR5", "XR6", "XR7", "XR8"  
+    from "S" join (select * from "R" where "R"."RID" in %s ) as tmp on "S"."FK"= tmp."RID";"""
     for i in range(max_iter):
         print("******************************************************** iteration:" + str(i))
         print("current W: \n", W)
@@ -103,24 +104,25 @@ def iterate_and_calculate(W, Sigma, max_iter):
 runtime_start = time.time()
 cpu_start = time.process_time()
 
-conn = psycopg2.connect(database="F-test", user="postgres", password="123456", host="localhost", port="5432")
+conn = psycopg2.connect(database="realdataWalmart", user="postgres", password="123456", host="localhost", port="5432")
 N,NR, mu = fetch_count_mu()
-# print("N:", N)
+print("N:", N)
+print("NR:", NR)
 # print("mu:", mu)
-NR_b = 2
+NR_b = 300
 total_batch = ceil(NR / NR_b)
 # print("total_batch:", total_batch)
 P = 2
-D = 6
+D = 13
 np.random.seed(2)
 W = np.random.rand(D, P)
 # print('W_init:\n', W)
 Sigma = 1
-max_iter = 100
+max_iter = 10
 iterate_and_calculate(W=W, Sigma=Sigma, max_iter=max_iter)
 conn.close()
 
 runtime_end = time.time()
 cpu_end = time.process_time()
-print("runtime of MPPCA:", (runtime_end - runtime_start))
-print("cpu of MPPCA:", (cpu_end - cpu_start))
+print("runtime of SPPCA:", (runtime_end - runtime_start))
+print("cpu of SPPCA:", (cpu_end - cpu_start))

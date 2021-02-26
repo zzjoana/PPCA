@@ -52,7 +52,9 @@ class MPPCA(object):
         ExpZ_b = np.zeros((P, N_b))
         ExpZZT_b = np.zeros((N_b, P, P))
         W_b_p1 = np.zeros((N_b, D, P))
+
         for n in range(N_b):
+            print("n:", n)
             X_b_mu[:, [n]]=(X_b[[n], :] - mu).T
             # print("(X_b[", n, "] - mu).T:\n", (X_b[[n], :] - mu).T)
             ExpZ_b[:, [n]] = G.dot(X_b_mu[:, [n]])
