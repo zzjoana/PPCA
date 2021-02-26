@@ -4,7 +4,7 @@ from math import ceil
 import numpy as np
 import psycopg2
 
-from src.fppca.S_test import SPPCA
+from src.fppca.SPPCA_improve import SPPCA
 
 
 
@@ -41,7 +41,10 @@ def fetch_data(cursorR, sql_b):
     # print("R_b_id", len(R_b_id))
 
     cursorS = conn.cursor()
+    runtime_start_line = time.time()
     cursorS.execute(sql_b, [tuple(R_b_id)])
+    runtime_end_line = time.time()
+    print("runtime of this line:", (runtime_end_line - runtime_start_line))
     S_b_list = cursorS.fetchall()
     data_X_b = np.mat(S_b_list)
     # print("data_X_b:\n", data_X_b, type(data_X_b))
@@ -67,17 +70,23 @@ def iterate_and_calculate(W, Sigma, max_iter):
         batch_num = 1
         while batch_num <= total_batch:
             runtime_start_batch = time.time()
-            print("########################################calculate E and W for batch_num:", batch_num)
+            # print("########################################calculate E and W for batch_num:", batch_num)
             data_X_b = fetch_data(cursorR,  sql_b)
+            runtime_end_fetch = time.time()
+            print("runtime of fetch:", (runtime_end_fetch - runtime_start_batch))
+            runtime_start_calculate= time.time()
             sppca.fit(data_X_b)
             W_b_p1_sum, W_b_p2_sum = sppca.calculate_E_W()
             W_p1_sum = W_p1_sum + W_b_p1_sum
             W_p2_sum = W_p2_sum + W_b_p2_sum
             batch_num += 1
             runtime_end_batch = time.time()
+
+            print("runtime of this calculate:", (runtime_end_batch - runtime_start_calculate))
             print("runtime of this batch:", (runtime_end_batch - runtime_start_batch))
+            print("$$$$$$$$$$$$$$$$$$$$$$$$$$")
         Wnew = W_p1_sum.dot(np.linalg.inv(W_p2_sum))
-        print("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!Wnew:\n", Wnew, Wnew.shape)
+        # print("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!Wnew:\n", Wnew, Wnew.shape)
         cursorR.close()
         # ##################Second read data#####################
         cursorR = conn.cursor()
@@ -127,5 +136,5 @@ conn.close()
 
 runtime_end = time.time()
 cpu_end = time.process_time()
-print("runtime of SPPCA:", (runtime_end - runtime_start))
-print("cpu of SPPCA:", (cpu_end - cpu_start))
+print("runtime of SPPCA_improve:", (runtime_end - runtime_start))
+print("cpu of SPPCA_improve:", (cpu_end - cpu_start))

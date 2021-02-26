@@ -25,7 +25,7 @@ class SPPCA(object):
 
     # Fit the model data X= W*Z + mu + sigma2*I
     def fit(self, data_X_b):
-        print("fit data")
+        # print("fit data")
         # initialize W to small random numbers
         self.X_b = data_X_b  # N*D
         # print("X_b:\n", self.X_b)
@@ -35,7 +35,7 @@ class SPPCA(object):
 
     def calculate_E_W(self):
 
-        print("Calculate_E_W")
+        #b print("Calculate_E_W")
         mu = self.mu
         P = self.P
         X_b = self.X_b
@@ -53,7 +53,7 @@ class SPPCA(object):
         ExpZZT_b = np.zeros((N_b, P, P))
         W_b_p1 = np.zeros((N_b, D, P))
         for n in range(N_b):
-            print("n:", n)
+            # print("n:", n)
             X_b_mu[:, [n]]=(X_b[[n], :] - mu).T
             # print("(X_b[", n, "] - mu).T:\n", (X_b[[n], :] - mu).T)
             ExpZ_b[:, [n]] = G.dot(X_b_mu[:, [n]])
@@ -74,7 +74,7 @@ class SPPCA(object):
 
 
     def calculate_Sigma2(self, Wnew):
-        print("Calculate_E_W")
+        # print("Calculate_E_W")
         mu = self.mu
         P = self.P
         X_b = self.X_b

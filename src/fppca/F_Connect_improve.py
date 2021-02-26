@@ -1,4 +1,3 @@
-
 import time
 from math import ceil
 from src.fppca.FPPCA_improve import FPPCA
@@ -6,7 +5,7 @@ from src.fppca.FPPCA_improve import FPPCA
 import numpy as np
 import psycopg2
 
-@profile
+
 def fetch_count_mu():
     cursor = conn.cursor()
     sql_NR = """select * from "R";"""
@@ -57,26 +56,52 @@ def fetch_count_mu():
 
 
 def fetch_data(cursorR, sql_S):
+    runtime_start_line = time.time()
     R_b_list = cursorR.fetchmany(NR_b)
+    runtime_end_1 = time.time()
+    print("runtime of 1:", (runtime_end_1 - runtime_start_line))
     R_b_array = np.array(R_b_list)
+    runtime_end_2 = time.time()
+    print("runtime of 2:", (runtime_end_2 - runtime_start_line))
     data_XR_b = np.mat(R_b_list)
+    runtime_end_3 = time.time()
+    print("runtime of 3:", (runtime_end_3 - runtime_start_line))
     # print("data_XR_b:\n", data_XR_b, type(data_XR_b))
     R_b_id = R_b_array[:, 0].tolist()
-
+    runtime_end_4 = time.time()
+    print("runtime of 4:", (runtime_end_4 - runtime_start_line))
+    #R_b_id_tuple = tuple(R_b_id)
     cursorS = conn.cursor()
+    runtime_end_5 = time.time()
+    print("runtime of 5:", (runtime_end_5 - runtime_start_line))
     cursorS.execute(sql_S, [tuple(R_b_id)])
+    # cursorS.execute(sql_S, [R_b_id_tuple[0], R_b_id_tuple[len(R_b_id_tuple) - 1]])
+    runtime_end_6 = time.time()
+    print("runtime of 6:", (runtime_end_6 - runtime_start_line))
     S_b_list = cursorS.fetchall()
-    # FK is necessary for matching count
+    # runtime_end_7 = time.time()
+    # print("runtime of 7:", (runtime_end_7 - runtime_start_line))
+    # S_b_list_array = np.array(S_b_list)
+    # runtime_end_8 = time.time()
+    # print("runtime of 8:", (runtime_end_8 - runtime_start_line))
+    # data_XS_b_FK_sorted = S_b_list_array[np.argsort(S_b_list_array[:, 4])]
+    # runtime_end_9 = time.time()
+    # print("runtime of 9:", (runtime_end_9 - runtime_start_line))
     data_XS_b_FK = np.mat(S_b_list)
-    # print("data_XS_b_FK:\n", data_XS_b_FK, type(data_XS_b_FK))
+    runtime_end_10 = time.time()
+    print("runtime of 10:", (runtime_end_10 - runtime_start_line))
+    print("data_XS_b_FK:\n", data_XS_b_FK, type(data_XS_b_FK))
     cursorS.close()
+    runtime_end_11 = time.time()
+    print("runtime of 11:", (runtime_end_11 - runtime_start_line))
     # print("runtime of fetch data:", (runtime_end_fetch - runtime_start_fetch))
     return data_XR_b, data_XS_b_FK
 
 
 def iterate_and_calculate(W, Sigma, max_iter):
     sql_R = """select * from "R" order by "RID";"""
-    sql_S = """select * from "S" where "FK" in %s order by "FK";"""
+    sql_S = """select "SID", "XS1", "XS2","XS3","FK" 
+    from "S" join (select * from "R" where "R"."RID" in %s ) as tmp on "S"."FK"= tmp."RID" order by "RID";"""
 
     for i in range(max_iter):
         print("******************************************************** iteration:" + str(i))
@@ -87,7 +112,6 @@ def iterate_and_calculate(W, Sigma, max_iter):
 
         # ##################first read data#####################
         cursorR = conn.cursor()
-
         cursorR.execute(sql_R)
         W_p1_sum = np.zeros((D, P))
         W_p2_sum = np.zeros((P, P))
@@ -95,6 +119,9 @@ def iterate_and_calculate(W, Sigma, max_iter):
         while batch_num <= total_batch:
             runtime_start_batch = time.time()
             data_XR_b, data_XS_b_FK = fetch_data(cursorR, sql_S)
+            runtime_end_fetch = time.time()
+            print("runtime of fetch:", (runtime_end_fetch - runtime_start_batch))
+            runtime_start_calculate = time.time()
             fppca.fit(data_XS_b_FK, data_XR_b)
             # print("########################################calculate E and W for batch_num:", batch_num)
             W_b_p1_sum, W_b_p2_sum = fppca.calculate_E_W()
@@ -102,7 +129,9 @@ def iterate_and_calculate(W, Sigma, max_iter):
             W_p2_sum = W_p2_sum + W_b_p2_sum
             batch_num += 1
             runtime_end_batch = time.time()
+            print("runtime of this calculate:", (runtime_end_batch - runtime_start_calculate))
             print("runtime of this batch:", (runtime_end_batch - runtime_start_batch))
+            print("$$$$$$$$$$$$$$$$$$$$$$$$$$")
         Wnew = W_p1_sum.dot(np.linalg.inv(W_p2_sum))
         # print("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!Wnew:\n", Wnew, Wnew.shape)
         cursorR.close()
@@ -117,7 +146,7 @@ def iterate_and_calculate(W, Sigma, max_iter):
         while batch_num <= total_batch:
             data_XR_b, data_XS_b_FK = fetch_data(cursorR, sql_S)
             fppca.fit(data_XS_b_FK, data_XR_b)
-            # print("########################################calculate Sigma for batch_num:", batch_num)
+            print("########################################calculate Sigma for batch_num:", batch_num)
             Sigma_b_p1_sum, Sigma_b_p2_sum, Sigma_b_p3_sum = fppca.calculate_Sigma2(Wnew)
             Sigma_p1_sum = Sigma_p1_sum + Sigma_b_p1_sum
             Sigma_p2_sum = Sigma_p2_sum + Sigma_b_p2_sum

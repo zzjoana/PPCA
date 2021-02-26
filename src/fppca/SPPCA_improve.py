@@ -27,8 +27,6 @@ class SPPCA(object):
 
     # Fit the model data X= W*Z + mu + sigma2*I
     def fit(self, data_X_b):
-        # print("fit data")
-        # initialize W to small random numbers
         RID = np.array(np.squeeze(data_X_b[:, 5]))
         # print("RID:\n", RID)
         # in each batch how many tuples matching one RID order
@@ -52,7 +50,6 @@ class SPPCA(object):
 
     def calculate_E_W(self):
 
-        print("Calculate_E_W")
         mu = self.mu
         P = self.P
         X_b = self.X_b
@@ -83,7 +80,7 @@ class SPPCA(object):
         return W_b_p1_sum, W_b_p2_sum
 
     def calculate_Sigma2(self, Wnew):
-        print("Calculate_E_W")
+        # print("Calculate_E_W")
         mu = self.mu
         P = self.P
         X_b = self.X_b
