@@ -26,8 +26,8 @@ class SPPCA(object):
         self.K = self.Sigma * M_1
 
     # Fit the model data X= W*Z + mu + sigma2*I
-    def fit(self, data_X_b):
-        RID = np.array(np.squeeze(data_X_b[:, 5]))
+    def fit(self, data_X_b_RID):
+        RID = np.array(np.squeeze(data_X_b_RID[:, 2]))
         # print("RID:\n", RID)
         # in each batch how many tuples matching one RID order
         key = np.unique(RID)
@@ -39,7 +39,7 @@ class SPPCA(object):
             matching_cnt.append(y_new.size)
         # print("matching_cnt:\n", matching_cnt)
         self.matching_cnt = matching_cnt
-
+        data_X_b = np.delete(data_X_b_RID, 2, axis=1)
         self.X_b = data_X_b  # N*D
         # print("X_b:\n", self.X_b)
         # print(self.X_b.shape)

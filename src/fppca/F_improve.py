@@ -52,7 +52,7 @@ class FPPCA(object):
 
     # fit the variables need data
     def fit(self, data_XS_b_FK, data_XR_b):
-        FK_b = np.array(np.squeeze(data_XS_b_FK[:, 4]))
+        FK_b = np.array(np.squeeze(data_XS_b_FK[:, 2]))
         # print("FK_b:\n", FK_b)
         # in each batch how many tuples matching one RID order
         key = np.unique(FK_b)
@@ -65,7 +65,7 @@ class FPPCA(object):
         # print("matching_cnt:\n", matching_cnt)
         self.matching_cnt = matching_cnt
 
-        self.XS_b = data_XS_b_FK[:, 0:4]
+        self.XS_b = data_XS_b_FK[:, 0:2]
         # print('XS_b:\n', self.XS_b)
         self.XR_b = data_XR_b
         # print('XR_b:\n', self.XR_b)

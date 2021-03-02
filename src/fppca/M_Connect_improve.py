@@ -1,3 +1,4 @@
+import decimal
 import time
 from math import ceil
 
@@ -10,7 +11,7 @@ from src.fppca.M_improve import MPPCA
 def join_tables():
     cursor = conn.cursor()
     sql_join = """create table join_result 
-    AS select * from "S" join "R" on "S"."FK"= "R"."RID" order by "RID";"""
+    AS select * from "s2" join "r7" on "s2"."fk"= "r7"."rid" order by "rid";"""
     cursor.execute(sql_join)
     cursor.close()
     conn.commit()
@@ -31,15 +32,16 @@ def fetch_count_mu():
     cursor.close()
 
     cursor = conn.cursor()
-    sql_NR = """select * from "R";"""
+    sql_NR = """select * from "r7";"""
     cursor.execute(sql_NR)
     NR = cursor.rowcount
     # print("NR:", NR)
     cursor.close()
 
     cursor = conn.cursor()
-    sql_mu = """select avg("SID"), avg("XS1"), avg("XS2"), avg("XS3"),avg("RID"),avg("XR1"), avg("XR2") , 
-                avg("XR3"), avg("XR4"), avg("XR5"), avg("XR6"), avg("XR7"), avg("XR8")
+    sql_mu = """select avg("xs1"), avg("xs2"),avg("xr1"), avg("xr2"), 
+                avg("xr3"), avg("xr4"), avg("xr5"), avg("xr6"), avg("xr7"), avg("xr8"), avg("xr9"), avg("xr10"),
+                avg("xr11"), avg("xr12"), avg("xr13"), avg("xr14"), avg("xr15")
                 from "join_result";"""
     cursor.execute(sql_mu)
     mu_tuple = cursor.fetchone()
@@ -47,11 +49,11 @@ def fetch_count_mu():
     cursor.close()
 
     cursor = conn.cursor()
-    sql_C = """select count(*) from "join_result" group by "RID" order by "RID";"""
+    sql_C = """select count(*) from "join_result" group by "rid" order by "rid";"""
     cursor.execute(sql_C)
     count_list = cursor.fetchall()
     count = np.array(count_list)
-    print("count", count[0:2, :], sum(count[0:2, :]), sum(count[0:2, :])[0])
+    # print("count", count[0:2, :], sum(count[0:2, :]), sum(count[0:2, :])[0])
 
     cursor.close()
     return N, NR, mu, count
@@ -61,15 +63,15 @@ def fetch_data(cursor, b):
     # print("b", b)
     b_list = cursor.fetchmany(sum(count[b:b + NR_b, :])[0])
     # print ("sum(count[",b,":",b + NR_b," :])[0]", sum(count[b:b + NR_b, :])[0])
-    data_X_b = np.mat(b_list)
-    # print("data_X_b:\n", data_X_b, type(data_X_b))
-
-    return data_X_b
+    data_X_b_RID = np.mat(b_list, dtype=float)
+    # print("data_X_b_RID:\n", data_X_b_RID, type(data_X_b_RID))
+    return data_X_b_RID
 
 
 def iterate_and_calculate(W, Sigma, max_iter):
-    sql = """select "SID", "XS1", "XS2","XS3", "RID", "XR1", "XR2", "XR3", "XR4", "XR5", "XR6", "XR7", "XR8"
-            from "join_result";"""
+    sql = """select  "xs1", "xs2", "rid", "xr1", "xr2", "xr3", "xr4", "xr5", "xr6", "xr7", "xr8", "xr9", "xr10",
+    "xr11", "xr12", "xr13", "xr14", "xr15"
+             from "join_result";"""
     for i in range(max_iter):
         print("******************************************************** iteration:" + str(i))
         # print("current W: \n", W)
@@ -85,11 +87,11 @@ def iterate_and_calculate(W, Sigma, max_iter):
         while batch_num <= total_batch:
             # print("########################################calculate E and W for batch_num:", batch_num)
             runtime_start_batch = time.time()
-            data_X_b = fetch_data(cursor, b)
+            data_X_b_RID = fetch_data(cursor, b)
             b = b + NR_b
             runtime_end_fetch = time.time()
             print("runtime of fetch:", (runtime_end_fetch - runtime_start_batch))
-            mppca.fit(data_X_b)
+            mppca.fit(data_X_b_RID)
             W_b_p1_sum, W_b_p2_sum = mppca.calculate_E_W()
             W_p1_sum = W_p1_sum + W_b_p1_sum
             W_p2_sum = W_p2_sum + W_b_p2_sum
@@ -107,9 +109,9 @@ def iterate_and_calculate(W, Sigma, max_iter):
         b = 0
         while batch_num <= total_batch:
             # print("########################################calculate Sigma for batch_num:", batch_num)
-            data_X_b = fetch_data(cursor, b)
+            data_X_b_RID = fetch_data(cursor, b)
             b = b + NR_b
-            mppca.fit(data_X_b)
+            mppca.fit(data_X_b_RID)
             Sigma_b_p1_sum, Sigma_b_p2_sum, Sigma_b_p3_sum = mppca.calculate_Sigma2(Wnew)
             Sigma_p1_sum = Sigma_p1_sum + Sigma_b_p1_sum
             Sigma_p2_sum = Sigma_p2_sum + Sigma_b_p2_sum
@@ -128,19 +130,19 @@ def iterate_and_calculate(W, Sigma, max_iter):
 runtime_start = time.time()
 cpu_start = time.process_time()
 
-conn = psycopg2.connect(database="realdataWalmart", user="postgres", password="123456", host="localhost", port="5432")
+conn = psycopg2.connect(database="syntheticdata", user="postgres", password="123456", host="localhost", port="5432")
 drop_table()
 join_tables()
 N, NR, mu, count = fetch_count_mu()
 # print("N:", N)
 # print("mu:", mu)
-print("count", count)
+#print("count", count)
 
-NR_b = 300
+NR_b = 25
 total_batch = ceil(NR / NR_b)
 # print("total_batch:", total_batch)
-P = 2
-D = 13
+P = 3
+D = 17
 np.random.seed(2)
 W = np.random.rand(D, P)
 Sigma = 1
