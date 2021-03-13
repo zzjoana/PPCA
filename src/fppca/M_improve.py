@@ -1,8 +1,9 @@
 import numpy as np
-
+import time
 
 class MPPCA(object):
     def __init__(self, P, W, Sigma, D, mu):
+
         # P = dimensionality of the latent variable
         self.P = P
         # sigma2 = variance of the noise
@@ -11,20 +12,25 @@ class MPPCA(object):
         self.D = D
         # N_b = number of data points each batch
         self.N_b = 0
+        self.NR_b = 0
         # mu = mean of the data Dx1
         self.mu = mu
         # W = projection matrix DxP
         self.W = W
         # X NxD
         self.X_b = None
+        self.matching_cnt = None
         M = self.W.T.dot(self.W) + self.Sigma * np.eye(self.P)
         M_1 = np.linalg.inv(M)
         # G = M*D
         self.G = M_1.dot(self.W.T)
         self.K = self.Sigma * M_1
 
+
+
     # Fit the model data X= W*Z + mu + sigma2*I
     def fit(self, data_X_b_RID):
+
         RID = np.array(np.squeeze(data_X_b_RID[:, 2]))
         # print("RID:\n", RID)
         # in each batch how many tuples matching one RID order
@@ -45,6 +51,7 @@ class MPPCA(object):
         # print("self.NR_b", self.NR_b)
         self.N_b = data_X_b.shape[0]  # number of data points (number of column)
         # print("mu:\n", self.mu, "N_b:", self.N_b, "D:", self.D, "P:", self.P)
+
 
     def calculate_E_W(self):
 
@@ -109,7 +116,13 @@ class MPPCA(object):
             Sigma_b_p1.append(np.sum(Sigma_b_p1_matrix))
             # print("(X_b[", n, "] - mu).T:\n", (X_b[[n], :] - mu).T)
             # print("Sigma_b_p1[:,", n, "]:\n", Sigma_b_p1[:, [n]])
-            Sigma_b_p2.append(2 * np.trace(ExpZ_b.T.dot(Wnew.T).dot(X_b_mu)))
+            sum = 0
+            for m in range(matching_cnt[nr]):
+                p2 = 2 * ExpZ_b.T[m, :].dot(Wnew.T.dot(X_b_mu)[:, m])
+                # print("np.sum(p2)", np.sum(p2))
+                sum = sum + np.sum(p2)
+            Sigma_b_p2.append(sum)
+            # Sigma_b_p2.append(2 * np.trace(ExpZ_b.T.dot(Wnew.T).dot(X_b_mu)))
             # print("Sigma_b_p2[:,", n, "]:\n", Sigma_b_p2[:, [n]])
             Sigma_b_p3.append(np.trace(np.squeeze(ExpZZT_b).dot(WW)))
             # print("before squeeze:\n", ExpZZT[[n], :, :])
