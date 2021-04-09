@@ -164,55 +164,67 @@ def iterate_and_calculate(sql_R, sql_S, D, DS, DR, NR_b, W, Sigma, max_iter):
 # DS = 2
 # DR = 15
 # NR_b = 25
-NR_1 = """select * from "r25";"""
-NS_1 = """select * from "s5";"""
-muS_1 = """select avg("xs1"), avg("xs2") from "s5";"""
-muR_1 = """select sum("r25"."xr1" * tmp.CNT), sum("r25"."xr2" * tmp.CNT),sum("r25"."xr3" * tmp.CNT), 
-           sum("r25"."xr4" * tmp.CNT),sum("r25"."xr5" * tmp.CNT), sum("r25"."xr6" * tmp.CNT)
-           from "r25" join (select "s5"."fk", count(*) as CNT from "s5" GROUP BY "s5"."fk") as tmp
-            on "r25"."rid" = tmp."fk";"""
-R_1 = """select "rid","xr1", "xr2", "xr3", "xr4", "xr5","xr6" from "r25" order by "rid";"""
-S_1 = """select  "xs1","xs2", "fk" from "s5" where "fk" in %s order by "fk"; """
 
-NR_2 = """select * from "r25";"""
-NS_2 = """select * from "s6";"""
-muS_2 = """select avg("xs1"), avg("xs2") from "s6";"""
-muR_2 = """select sum("r25"."xr1" * tmp.CNT), sum("r25"."xr2" * tmp.CNT),sum("r25"."xr3" * tmp.CNT), 
-           sum("r25"."xr4" * tmp.CNT),sum("r25"."xr5" * tmp.CNT), sum("r25"."xr6" * tmp.CNT)
-           from "r25" join (select "s6"."fk", count(*) as CNT from "s6" GROUP BY "s6"."fk") as tmp
-            on "r25"."rid" = tmp."fk";"""
-R_2 = """select "rid","xr1", "xr2", "xr3", "xr4", "xr5","xr6" from "r25" order by "rid";"""
-S_2 = """select  "xs1","xs2", "fk" from "s6" where "fk" in %s order by "fk"; """
 
-NR_3 = """select * from "r25";"""
-NS_3 = """select * from "s7";"""
-muS_3 = """select avg("xs1"), avg("xs2") from "s7";"""
-muR_3 = """select sum("r25"."xr1" * tmp.CNT), sum("r25"."xr2" * tmp.CNT),sum("r25"."xr3" * tmp.CNT), 
-           sum("r25"."xr4" * tmp.CNT),sum("r25"."xr5" * tmp.CNT), sum("r25"."xr6" * tmp.CNT)
-           from "r25" join (select "s7"."fk", count(*) as CNT from "s7" GROUP BY "s7"."fk") as tmp
-            on "r25"."rid" = tmp."fk";"""
-R_3 = """select "rid","xr1", "xr2", "xr3", "xr4", "xr5","xr6" from "r25" order by "rid";"""
-S_3 = """select  "xs1","xs2", "fk" from "s7" where "fk" in %s order by "fk"; """
+NR_1 = """select * from "r20";"""
+NS_1 = """select * from "s14";"""
+muS_1 = """select avg("xs1"), avg("xs2") from "s14";"""
+muR_1 = """select sum("r20"."xr1" * tmp.CNT), sum("r20"."xr2" * tmp.CNT)
+           from "r20" join (select "s14"."fk", count(*) as CNT from "s14" GROUP BY "s14"."fk") as tmp
+            on "r20"."rid" = tmp."fk";"""
+R_1 = """select "rid","xr1", "xr2"
+       from "r20" order by "rid";"""
+S_1 = """select  "xs1","xs2", "fk" from "s14" where "fk" in %s order by "fk"; """
 
-NR_4 = """select * from "r25";"""
-NS_4 = """select * from "s8";"""
-muS_4 = """select avg("xs1"), avg("xs2") from "s8";"""
-muR_4 = """select sum("r25"."xr1" * tmp.CNT), sum("r25"."xr2" * tmp.CNT),sum("r25"."xr3" * tmp.CNT), 
-           sum("r25"."xr4" * tmp.CNT),sum("r25"."xr5" * tmp.CNT), sum("r25"."xr6" * tmp.CNT)
-           from "r25" join (select "s8"."fk", count(*) as CNT from "s8" GROUP BY "s8"."fk") as tmp
-            on "r25"."rid" = tmp."fk";"""
-R_4 = """select "rid","xr1", "xr2", "xr3", "xr4", "xr5","xr6" from "r25" order by "rid";"""
-S_4 = """select  "xs1","xs2", "fk" from "s8" where "fk" in %s order by "fk"; """
+NR_2 = """select * from "r29";"""
+NS_2 = """select * from "s14";"""
+muS_2 = """select avg("xs1"), avg("xs2") from "s14";"""
+muR_2 = """select sum("r29"."xr1" * tmp.CNT), sum("r29"."xr2" * tmp.CNT), sum("r29"."xr3" * tmp.CNT), 
+sum("r29"."xr4" * tmp.CNT), sum("r29"."xr5" * tmp.CNT), sum("r29"."xr6" * tmp.CNT)
+           from "r29" join (select "s14"."fk", count(*) as CNT from "s14" GROUP BY "s14"."fk") as tmp
+            on "r29"."rid" = tmp."fk";"""
+R_2 = """select "rid","xr1", "xr2", "xr3", "xr4", "xr5","xr6"
+       from "r29" order by "rid";"""
+S_2 = """select  "xs1","xs2", "fk" from "s14" where "fk" in %s order by "fk"; """
 
-NR_5 = """select * from "r25";"""
-NS_5 = """select * from "s9";"""
-muS_5 = """select avg("xs1"), avg("xs2") from "s9";"""
-muR_5 = """select sum("r25"."xr1" * tmp.CNT), sum("r25"."xr2" * tmp.CNT),sum("r25"."xr3" * tmp.CNT), 
-           sum("r25"."xr4" * tmp.CNT),sum("r25"."xr5" * tmp.CNT), sum("r25"."xr6" * tmp.CNT)
-           from "r25" join (select "s9"."fk", count(*) as CNT from "s9" GROUP BY "s9"."fk") as tmp
-            on "r25"."rid" = tmp."fk";"""
-R_5 = """select "rid","xr1", "xr2", "xr3", "xr4", "xr5","xr6" from "r25" order by "rid";"""
-S_5 = """select  "xs1","xs2", "fk" from "s9" where "fk" in %s order by "fk"; """
+NR_3 = """select * from "r24";"""
+NS_3 = """select * from "s14";"""
+muS_3 = """select avg("xs1"), avg("xs2") from "s14";"""
+muR_3 = """select sum("r24"."xr1" * tmp.CNT), sum("r24"."xr2" * tmp.CNT), sum("r24"."xr3" * tmp.CNT), 
+sum("r24"."xr4" * tmp.CNT), sum("r24"."xr5" * tmp.CNT), sum("r24"."xr6" * tmp.CNT), sum("r24"."xr7" * tmp.CNT), 
+sum("r24"."xr8" * tmp.CNT), sum("r24"."xr9" * tmp.CNT), sum("r24"."xr10" * tmp.CNT)
+           from "r24" join (select "s14"."fk", count(*) as CNT from "s14" GROUP BY "s14"."fk") as tmp
+            on "r24"."rid" = tmp."fk";"""
+R_3 = """select "rid","xr1", "xr2", "xr3", "xr4", "xr5","xr6","xr7","xr8","xr9","xr10"
+       from "r24" order by "rid";"""
+S_3 = """select  "xs1","xs2", "fk" from "s14" where "fk" in %s order by "fk"; """
+
+NR_4 = """select * from "r32";"""
+NS_4 = """select * from "s14";"""
+muS_4 = """select avg("xs1"), avg("xs2") from "s14";"""
+muR_4 = """select sum("r32"."xr1" * tmp.CNT), sum("r32"."xr2" * tmp.CNT), sum("r32"."xr3" * tmp.CNT), 
+sum("r32"."xr4" * tmp.CNT), sum("r32"."xr5" * tmp.CNT), sum("r32"."xr6" * tmp.CNT), sum("r32"."xr7" * tmp.CNT), 
+sum("r32"."xr8" * tmp.CNT), sum("r32"."xr9" * tmp.CNT), sum("r32"."xr10" * tmp.CNT), sum("r32"."xr11" * tmp.CNT), 
+sum("r32"."xr12" * tmp.CNT), sum("r32"."xr13" * tmp.CNT), sum("r32"."xr14" * tmp.CNT)
+           from "r32" join (select "s14"."fk", count(*) as CNT from "s14" GROUP BY "s14"."fk") as tmp
+            on "r32"."rid" = tmp."fk";"""
+R_4 = """select "rid","xr1", "xr2", "xr3", "xr4", "xr5","xr6","xr7","xr8","xr9","xr10","xr11","xr12","xr13","xr14"
+       from "r32" order by "rid";"""
+S_4 = """select  "xs1","xs2", "fk" from "s14" where "fk" in %s order by "fk"; """
+
+NR_5 = """select * from "r33";"""
+NS_5 = """select * from "s14";"""
+muS_5 = """select avg("xs1"), avg("xs2") from "s14";"""
+muR_5 = """select sum("r33"."xr1" * tmp.CNT), sum("r33"."xr2" * tmp.CNT), sum("r33"."xr3" * tmp.CNT), 
+sum("r33"."xr4" * tmp.CNT), sum("r33"."xr5" * tmp.CNT), sum("r33"."xr6" * tmp.CNT), sum("r33"."xr7" * tmp.CNT), 
+sum("r33"."xr8" * tmp.CNT), sum("r33"."xr9" * tmp.CNT), sum("r33"."xr10" * tmp.CNT), sum("r33"."xr11" * tmp.CNT), 
+sum("r33"."xr12" * tmp.CNT), sum("r33"."xr13" * tmp.CNT), sum("r33"."xr14" * tmp.CNT),sum("r33"."xr15" * tmp.CNT), 
+sum("r33"."xr16" * tmp.CNT), sum("r33"."xr17" * tmp.CNT), sum("r33"."xr18" * tmp.CNT)
+           from "r33" join (select "s14"."fk", count(*) as CNT from "s14" GROUP BY "s14"."fk") as tmp
+            on "r33"."rid" = tmp."fk";"""
+R_5 = """select "rid","xr1", "xr2", "xr3", "xr4", "xr5","xr6","xr7","xr8","xr9","xr10","xr11","xr12","xr13","xr14",
+        "xr15","xr16","xr17","xr18" from "r33" order by "rid";"""
+S_5 = """select  "xs1","xs2", "fk" from "s14" where "fk" in %s order by "fk"; """
 
 NR_sql_list = [NR_1, NR_2, NR_3, NR_4, NR_5]
 NS_sql_list = [NS_1, NS_2, NS_3, NS_4, NS_5]
@@ -221,16 +233,16 @@ muR_sql_list = [muR_1, muR_2, muR_3, muR_4, muR_5]
 R_sql_list = [R_1, R_2, R_3, R_4, R_5]
 S_sql_list = [S_1, S_2, S_3, S_4, S_5]
 
-D_list = [8, 8, 8, 8, 8]
+D_list = [4, 8, 12, 16, 20]
 DS_list = [2, 2, 2, 2, 2]
-DR_list = [6, 6, 6, 6, 6]
+DR_list = [2, 6, 10, 14, 18]
 NR_b_list = [25, 25, 25, 25, 25]
 
 runtime_list = []
 cputime_list = []
 fetchdatatime_list = []
 calculatetime_list = []
-for i in range(3, len(NR_sql_list)):
+for i in range( len(NR_sql_list)):
     print("i=", i)
     runtime_start = time.time()
     # cpu_start = time.process_time()

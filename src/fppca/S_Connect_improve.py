@@ -152,75 +152,277 @@ def iterate_and_calculate(sql_R, sql_b, D, NR_b, W, Sigma, max_iter):
 # R_1 = """select "rid" from "r1" order by "rid";"""
 # b_1 = """select "xs1", "xs2", "rid", "xr1", "xr2"  from "s1" as tmp1,"r1" as tmp2
 #          where "fk" in %s and tmp1."fk"=tmp2."rid" order by "rid";"""
+NR_1 = """select * from "r3";"""
+N_1 = """select * from "s3";"""
+mu_1 = """select  avg("xs1"), avg("xs2"), avg("xr1"), avg("xr2")
+         from (select * from "s3" join "r3" on "s3"."fk"= "r3"."rid") as tmp;"""
+R_1 = """select "rid" from "r3" ;"""
+b_1 = """select "xs1", "xs2", "rid", "xr1", "xr2"
+        from "s3" as tmp1,"r3" as tmp2
+        where "fk" in %s and tmp1."fk"=tmp2."rid" order by "rid", "sid";"""
 
-NR_1 = """select * from "r25";"""
-N_1 = """select * from "s5";"""
-mu_1 = """select  avg("xs1"), avg("xs2"), avg("xr1") , avg("xr2"),
-            avg("xr3"), avg("xr4"), avg("xr5") , avg("xr6") from 
-          (select * from "s5" join "r25" on "s5"."fk"= "r25"."rid") as tmp;"""
-R_1 = """select "rid" from "r25" ;"""
-b_1 = """select "xs1", "xs2", "rid", "xr1", "xr2", "xr3", "xr4", "xr5" , "xr6"
-           from "s5" as tmp1,"r25" as tmp2
-         where "fk" in %s and tmp1."fk"=tmp2."rid" order by "rid","sid";"""
+NR_2 = """select * from "r11";"""
+N_2 = """select * from "s3";"""
+mu_2 = """select  avg("xs1"), avg("xs2"), avg("xr1"), avg("xr2"), avg("xr3"), avg("xr4"), avg("xr5"),
+          avg("xr6")from (select * from "s3" join "r11" on "s3"."fk"= "r11"."rid") as tmp;"""
+R_2 = """select "rid" from "r11" ;"""
+b_2 = """select "xs1", "xs2", "rid", "xr1", "xr2", "xr3", "xr4", "xr5", "xr6"
+        from "s3" as tmp1,"r11" as tmp2
+        where "fk" in %s and tmp1."fk"=tmp2."rid" order by "rid", "sid";"""
 
-NR_2 = """select * from "r25";"""
-N_2 = """select * from "s6";"""
-mu_2 = """select  avg("xs1"), avg("xs2"), avg("xr1"), avg("xr2"),
-             avg("xr3"), avg("xr4"), avg("xr5") , avg("xr6") from 
-       (select * from "s6" join "r25" on "s6"."fk"= "r25"."rid") as tmp;"""
-R_2 = """select "rid" from "r25" ;"""
-b_2 = """select "xs1", "xs2", "rid", "xr1", "xr2", "xr3", "xr4", "xr5" , "xr6"
-         from "s6" as tmp1,"r25" as tmp2
-        where "fk" in %s and tmp1."fk"=tmp2."rid" order by "rid","sid";"""
+NR_3 = """select * from "r8";"""
+N_3 = """select * from "s3";"""
+mu_3 = """select  avg("xs1"), avg("xs2"), avg("xr1"), avg("xr2"), avg("xr3"), avg("xr4"), avg("xr5"),
+          avg("xr6"), avg("xr7"), avg("xr8"), avg("xr9"), avg("xr10")
+           from (select * from "s3" join "r8" on "s3"."fk"= "r8"."rid") as tmp;"""
+R_3 = """select "rid" from "r8" ;"""
+b_3 = """select "xs1", "xs2", "rid", "xr1", "xr2", "xr3", "xr4", "xr5" , "xr6", "xr7", "xr8", "xr9", "xr10"
+        from "s3" as tmp1,"r8" as tmp2
+        where "fk" in %s and tmp1."fk"=tmp2."rid" order by "rid", "sid";"""
 
-NR_3 = """select * from "r25";"""
-N_3 = """select * from "s7";"""
-mu_3 = """select  avg("xs1"), avg("xs2"), avg("xr1"), avg("xr2"),
-              avg("xr3"), avg("xr4"), avg("xr5") , avg("xr6")from 
-       (select * from "s7" join "r25" on "s7"."fk"= "r25"."rid") as tmp;"""
-R_3 = """select "rid" from "r25";"""
-b_3 = """select "xs1", "xs2", "rid", "xr1", "xr2", "xr3", "xr4", "xr5" , "xr6"
-         from "s7" as tmp1,"r25" as tmp2
-         where "fk" in %s and tmp1."fk"=tmp2."rid" order by "rid","sid";"""
+NR_4 = """select * from "r12";"""
+N_4 = """select * from "s3";"""
+mu_4 = """select  avg("xs1"), avg("xs2"), avg("xr1"), avg("xr2"), avg("xr3"), avg("xr4"), avg("xr5"),
+          avg("xr6"), avg("xr7"), avg("xr8"), avg("xr9"), avg("xr10"), avg("xr11"), avg("xr12"), avg("xr13"), 
+          avg("xr14") from (select * from "s3" join "r12" on "s3"."fk"= "r12"."rid") as tmp;"""
+R_4 = """select "rid" from "r12" ;"""
+b_4 = """select "xs1", "xs2", "rid", "xr1", "xr2", "xr3", "xr4", "xr5" , "xr6", "xr7", "xr8", "xr9", "xr10",
+         "xr11","xr12", "xr13","xr14" from "s3" as tmp1,"r12" as tmp2
+        where "fk" in %s and tmp1."fk"=tmp2."rid" order by "rid", "sid";"""
 
-NR_4 = """select * from "r25";"""
-N_4 = """select * from "s8";"""
-mu_4 = """select  avg("xs1"), avg("xs2"), avg("xr1"), avg("xr2"),
-             avg("xr3"), avg("xr4"), avg("xr5") , avg("xr6") from 
-       (select * from "s8" join "r25" on "s8"."fk"= "r25"."rid") as tmp;"""
-R_4 = """select "rid" from "r25";"""
-b_4 = """select "xs1", "xs2", "rid", "xr1", "xr2", "xr3", "xr4", "xr5" , "xr6"
-         from "s8" as tmp1,"r25" as tmp2
-         where "fk" in %s and tmp1."fk"=tmp2."rid" order by "rid","sid";"""
+NR_5 = """select * from "r13";"""
+N_5 = """select * from "s3";"""
+mu_5 = """select  avg("xs1"), avg("xs2"), avg("xr1"), avg("xr2"), avg("xr3"), avg("xr4"), avg("xr5"),
+          avg("xr6"), avg("xr7"), avg("xr8"), avg("xr9"), avg("xr10"), avg("xr11"), avg("xr12"), avg("xr13"),
+          avg("xr14"), avg("xr15"), avg("xr16"), avg("xr17"), avg("xr18")from 
+          (select * from "s3" join "r13" on "s3"."fk"= "r13"."rid") as tmp;"""
+R_5 = """select "rid" from "r13";"""
+b_5 = """select "xs1", "xs2", "rid", "xr1", "xr2","xr3", "xr4", "xr5", "xr6", "xr7", "xr8", "xr9", "xr10",
+        "xr11", "xr12","xr13", "xr14", "xr15", "xr16", "xr17", "xr18"
+         from "s3" as tmp1,"r13" as tmp2
+         where "fk" in %s and tmp1."fk"=tmp2."rid" order by "rid", "sid";"""
 
-NR_5 = """select * from "r25";"""
-N_5 = """select * from "s9";"""
-mu_5 = """select  avg("xs1"), avg("xs2"), avg("xr1"), avg("xr2"),
-             avg("xr3"), avg("xr4"), avg("xr5") , avg("xr6") from 
-       (select * from "s9" join "r25" on "s9"."fk"= "r25"."rid") as tmp;"""
-R_5 = """select "rid" from "r25";"""
-b_5 = """select "xs1", "xs2", "rid", "xr1", "xr2", "xr3", "xr4", "xr5" , "xr6"
-           from "s9" as tmp1,"r25" as tmp2
-         where "fk" in %s and tmp1."fk"=tmp2."rid" order by "rid","sid";"""
+NR_6 = """select * from "r1";"""
+N_6 = """select * from "s1";"""
+mu_6 = """select  avg("xs1"), avg("xs2"), avg("xr1"), avg("xr2")
+         from (select * from "s1" join "r1" on "s1"."fk"= "r1"."rid") as tmp;"""
+R_6 = """select "rid" from "r1" ;"""
+b_6 = """select "xs1", "xs2", "rid", "xr1", "xr2"
+        from "s1" as tmp1,"r1" as tmp2
+        where "fk" in %s and tmp1."fk"=tmp2."rid" order by "rid", "sid";"""
 
+NR_7 = """select * from "r14";"""
+N_7 = """select * from "s1";"""
+mu_7 = """select  avg("xs1"), avg("xs2"), avg("xr1"), avg("xr2"), avg("xr3"), avg("xr4"), avg("xr5"),
+          avg("xr6") from  (select * from "s1" join "r14" on "s1"."fk"= "r14"."rid") as tmp;"""
+R_7 = """select "rid" from "r14";"""
+b_7 = """select "xs1", "xs2", "rid", "xr1", "xr2", "xr3", "xr4", "xr5" , "xr6"
+        from "s1" as tmp1,"r14" as tmp2
+       where "fk" in %s and tmp1."fk"=tmp2."rid" order by "rid", "sid";"""
 
+NR_8 = """select * from "r6";"""
+N_8 = """select * from "s1";"""
+mu_8 = """select  avg("xs1"), avg("xs2"), avg("xr1"), avg("xr2"), avg("xr3"), avg("xr4"), avg("xr5"),
+          avg("xr6"), avg("xr7"), avg("xr8"), avg("xr9"), avg("xr10")
+           from (select * from "s1" join "r6" on "s1"."fk"= "r6"."rid") as tmp;"""
+R_8 = """select "rid" from "r6" ;"""
+b_8 = """select "xs1", "xs2", "rid", "xr1", "xr2", "xr3", "xr4", "xr5" , "xr6", "xr7", "xr8", "xr9", "xr10"
+        from "s1" as tmp1,"r6" as tmp2
+        where "fk" in %s and tmp1."fk"=tmp2."rid" order by "rid", "sid";"""
 
-NR_sql_list = [NR_1, NR_2, NR_3, NR_4, NR_5]
-N_sql_list = [N_1, N_2, N_3, N_4, N_5]
-mu_sql_list = [mu_1, mu_2, mu_3, mu_4, mu_5]
-R_sql_list = [R_1, R_2, R_3, R_4, R_5]
-b_sql_list = [b_1, b_2, b_3, b_4, b_5]
+NR_9 = """select * from "r15";"""
+N_9 = """select * from "s1";"""
+mu_9 = """select  avg("xs1"), avg("xs2"), avg("xr1"), avg("xr2"), avg("xr3"), avg("xr4"), avg("xr5"),
+          avg("xr6"), avg("xr7"), avg("xr8"), avg("xr9"), avg("xr10"), avg("xr11"), avg("xr12"), avg("xr13"),
+          avg("xr14")from (select * from "s1" join "r15" on "s1"."fk"= "r15"."rid") as tmp;"""
+R_9 = """select "rid" from "r15" ;"""
+b_9 = """select "xs1", "xs2", "rid", "xr1", "xr2", "xr3", "xr4", "xr5" , "xr6", "xr7", "xr8", "xr9", "xr10",
+          "xr11", "xr12", "xr13", "xr14"
+           from "s1" as tmp1,"r15" as tmp2
+       where "fk" in %s and tmp1."fk"=tmp2."rid" order by "rid", "sid";"""
 
-D_list = [8,8,8,8,8]
+NR_10 = """select * from "r16";"""
+N_10 = """select * from "s1";"""
+mu_10 = """select  avg("xs1"), avg("xs2"), avg("xr1"), avg("xr2"), avg("xr3"), avg("xr4"), avg("xr5"),
+          avg("xr6"), avg("xr7"), avg("xr8"), avg("xr9"), avg("xr10"), avg("xr11"), avg("xr12"), avg("xr13"),
+          avg("xr14"),avg("xr15"), avg("xr16"), avg("xr17"), avg("xr18")
+          from (select * from "s1" join "r16" on "s1"."fk"= "r16"."rid") as tmp;"""
+R_10 = """select "rid" from "r16" ;"""
+b_10 = """select "xs1", "xs2", "rid", "xr1", "xr2", "xr3", "xr4", "xr5" , "xr6", "xr7", "xr8", "xr9", "xr10",
+          "xr11", "xr12", "xr13", "xr14","xr15", "xr16", "xr17", "xr18"
+          from "s1" as tmp1,"r16" as tmp2
+        where "fk" in %s and tmp1."fk"=tmp2."rid" order by "rid", "sid";"""
+
+NR_11 = """select * from "r5";"""
+N_11 = """select * from "s5";"""
+mu_11 = """select  avg("xs1"), avg("xs2"), avg("xr1"), avg("xr2")
+         from (select * from "s5" join "r5" on "s5"."fk"= "r5"."rid") as tmp;"""
+R_11 = """select "rid" from "r5" ;"""
+b_11 = """select "xs1", "xs2", "rid", "xr1", "xr2"
+        from "s5" as tmp1,"r5" as tmp2
+        where "fk" in %s and tmp1."fk"=tmp2."rid" order by "rid", "sid";"""
+
+NR_12 = """select * from "r25";"""
+N_12 = """select * from "s5";"""
+mu_12 = """select  avg("xs1"), avg("xs2"), avg("xr1"), avg("xr2"), avg("xr3"), avg("xr4"), avg("xr5"),
+          avg("xr6")from (select * from "s5" join "r25" on "s5"."fk"= "r25"."rid") as tmp;"""
+R_12 = """select "rid" from "r25" ;"""
+b_12 = """select "xs1", "xs2", "rid", "xr1", "xr2", "xr3", "xr4", "xr5", "xr6"
+        from "s5" as tmp1,"r25" as tmp2
+        where "fk" in %s and tmp1."fk"=tmp2."rid" order by "rid", "sid";"""
+
+NR_13 = """select * from "r10";"""
+N_13 = """select * from "s5";"""
+mu_13 = """select  avg("xs1"), avg("xs2"), avg("xr1"), avg("xr2"), avg("xr3"), avg("xr4"), avg("xr5"),
+          avg("xr6"), avg("xr7"), avg("xr8"), avg("xr9"), avg("xr10")
+           from (select * from "s5" join "r10" on "s5"."fk"= "r10"."rid") as tmp;"""
+R_13 = """select "rid" from "r10" ;"""
+b_13 = """select "xs1", "xs2", "rid", "xr1", "xr2", "xr3", "xr4", "xr5" , "xr6", "xr7", "xr8", "xr9", "xr10"
+        from "s5" as tmp1,"r10" as tmp2
+        where "fk" in %s and tmp1."fk"=tmp2."rid" order by "rid", "sid";"""
+
+NR_14 = """select * from "r30";"""
+N_14 = """select * from "s5";"""
+mu_14 = """select  avg("xs1"), avg("xs2"), avg("xr1"), avg("xr2"), avg("xr3"), avg("xr4"), avg("xr5"),
+          avg("xr6"), avg("xr7"), avg("xr8"), avg("xr9"), avg("xr10"), avg("xr11"), avg("xr12"), avg("xr13"), 
+          avg("xr14") from (select * from "s5" join "r30" on "s5"."fk"= "r30"."rid") as tmp;"""
+R_14 = """select "rid" from "r30" ;"""
+b_14 = """select "xs1", "xs2", "rid", "xr1", "xr2", "xr3", "xr4", "xr5" , "xr6", "xr7", "xr8", "xr9", "xr10",
+         "xr11","xr12", "xr13","xr14" from "s5" as tmp1,"r30" as tmp2
+        where "fk" in %s and tmp1."fk"=tmp2."rid" order by "rid", "sid";"""
+
+NR_15 = """select * from "r31";"""
+N_15 = """select * from "s5";"""
+mu_15 = """select  avg("xs1"), avg("xs2"), avg("xr1"), avg("xr2"), avg("xr3"), avg("xr4"), avg("xr5"),
+          avg("xr6"), avg("xr7"), avg("xr8"), avg("xr9"), avg("xr10"), avg("xr11"), avg("xr12"), avg("xr13"),
+          avg("xr14"), avg("xr15"), avg("xr16"), avg("xr17"), avg("xr18")from 
+          (select * from "s5" join "r31" on "s5"."fk"= "r31"."rid") as tmp;"""
+R_15 = """select "rid" from "r31";"""
+b_15 = """select "xs1", "xs2", "rid", "xr1", "xr2","xr3", "xr4", "xr5", "xr6", "xr7", "xr8", "xr9", "xr10",
+        "xr11", "xr12","xr13", "xr14", "xr15", "xr16", "xr17", "xr18"
+         from "s5" as tmp1,"r31" as tmp2
+         where "fk" in %s and tmp1."fk"=tmp2."rid" order by "rid", "sid";"""
+
+NR_16 = """select * from "r20";"""
+N_16 = """select * from "s13";"""
+mu_16 = """select  avg("xs1"), avg("xs2"), avg("xr1"), avg("xr2")
+         from (select * from "s13" join "r20" on "s13"."fk"= "r20"."rid") as tmp;"""
+R_16 = """select "rid" from "r20" ;"""
+b_16 = """select "xs1", "xs2", "rid", "xr1", "xr2"
+        from "s13" as tmp1,"r20" as tmp2
+        where "fk" in %s and tmp1."fk"=tmp2."rid" order by "rid", "sid";"""
+
+NR_17 = """select * from "r29";"""
+N_17 = """select * from "s13";"""
+mu_17 = """select  avg("xs1"), avg("xs2"), avg("xr1"), avg("xr2"), avg("xr3"), avg("xr4"), avg("xr5"),
+          avg("xr6") from  (select * from "s13" join "r29" on "s13"."fk"= "r29"."rid") as tmp;"""
+R_17 = """select "rid" from "r29";"""
+b_17 = """select "xs1", "xs2", "rid", "xr1", "xr2", "xr3", "xr4", "xr5" , "xr6"
+        from "s13" as tmp1,"r29" as tmp2
+       where "fk" in %s and tmp1."fk"=tmp2."rid" order by "rid", "sid";"""
+
+NR_18 = """select * from "r24";"""
+N_18 = """select * from "s13";"""
+mu_18 = """select  avg("xs1"), avg("xs2"), avg("xr1"), avg("xr2"), avg("xr3"), avg("xr4"), avg("xr5"),
+          avg("xr6"), avg("xr7"), avg("xr8"), avg("xr9"), avg("xr10")
+           from (select * from "s13" join "r24" on "s13"."fk"= "r24"."rid") as tmp;"""
+R_18 = """select "rid" from "r24" ;"""
+b_18 = """select "xs1", "xs2", "rid", "xr1", "xr2", "xr3", "xr4", "xr5" , "xr6", "xr7", "xr8", "xr9", "xr10"
+        from "s13" as tmp1,"r24" as tmp2
+        where "fk" in %s and tmp1."fk"=tmp2."rid" order by "rid", "sid";"""
+
+NR_19 = """select * from "r32";"""
+N_19 = """select * from "s13";"""
+mu_19 = """select  avg("xs1"), avg("xs2"), avg("xr1"), avg("xr2"), avg("xr3"), avg("xr4"), avg("xr5"),
+          avg("xr6"), avg("xr7"), avg("xr8"), avg("xr9"), avg("xr10"), avg("xr11"), avg("xr12"), avg("xr13"),
+          avg("xr14")from (select * from "s13" join "r32" on "s13"."fk"= "r32"."rid") as tmp;"""
+R_19 = """select "rid" from "r32" ;"""
+b_19 = """select "xs1", "xs2", "rid", "xr1", "xr2", "xr3", "xr4", "xr5" , "xr6", "xr7", "xr8", "xr9", "xr10",
+          "xr11", "xr12", "xr13", "xr14"
+           from "s13" as tmp1,"r32" as tmp2
+       where "fk" in %s and tmp1."fk"=tmp2."rid" order by "rid", "sid";"""
+
+NR_20 = """select * from "r33";"""
+N_20 = """select * from "s13";"""
+mu_20 = """select  avg("xs1"), avg("xs2"), avg("xr1"), avg("xr2"), avg("xr3"), avg("xr4"), avg("xr5"),
+          avg("xr6"), avg("xr7"), avg("xr8"), avg("xr9"), avg("xr10"), avg("xr11"), avg("xr12"), avg("xr13"),
+          avg("xr14"),avg("xr15"), avg("xr16"), avg("xr17"), avg("xr18")
+          from (select * from "s13" join "r33" on "s13"."fk"= "r33"."rid") as tmp;"""
+R_20 = """select "rid" from "r33" ;"""
+b_20 = """select "xs1", "xs2", "rid", "xr1", "xr2", "xr3", "xr4", "xr5" , "xr6", "xr7", "xr8", "xr9", "xr10",
+          "xr11", "xr12", "xr13", "xr14","xr15", "xr16", "xr17", "xr18"
+          from "s13" as tmp1,"r33" as tmp2
+        where "fk" in %s and tmp1."fk"=tmp2."rid" order by "rid", "sid";"""
+
+NR_21 = """select * from "r20";"""
+N_21 = """select * from "s14";"""
+mu_21 = """select  avg("xs1"), avg("xs2"), avg("xr1"), avg("xr2")
+         from (select * from "s14" join "r20" on "s14"."fk"= "r20"."rid") as tmp;"""
+R_21 = """select "rid" from "r20" ;"""
+b_21 = """select "xs1", "xs2", "rid", "xr1", "xr2"
+        from "s14" as tmp1,"r20" as tmp2
+        where "fk" in %s and tmp1."fk"=tmp2."rid" order by "rid", "sid";"""
+
+NR_22 = """select * from "r29";"""
+N_22 = """select * from "s14";"""
+mu_22 = """select  avg("xs1"), avg("xs2"), avg("xr1"), avg("xr2"), avg("xr3"), avg("xr4"), avg("xr5"),
+          avg("xr6") from  (select * from "s14" join "r29" on "s14"."fk"= "r29"."rid") as tmp;"""
+R_22 = """select "rid" from "r29";"""
+b_22 = """select "xs1", "xs2", "rid", "xr1", "xr2", "xr3", "xr4", "xr5" , "xr6"
+        from "s14" as tmp1,"r29" as tmp2
+       where "fk" in %s and tmp1."fk"=tmp2."rid" order by "rid", "sid";"""
+
+NR_23 = """select * from "r24";"""
+N_23 = """select * from "s14";"""
+mu_23 = """select  avg("xs1"), avg("xs2"), avg("xr1"), avg("xr2"), avg("xr3"), avg("xr4"), avg("xr5"),
+          avg("xr6"), avg("xr7"), avg("xr8"), avg("xr9"), avg("xr10")
+           from (select * from "s14" join "r24" on "s14"."fk"= "r24"."rid") as tmp;"""
+R_23 = """select "rid" from "r24" ;"""
+b_23 = """select "xs1", "xs2", "rid", "xr1", "xr2", "xr3", "xr4", "xr5" , "xr6", "xr7", "xr8", "xr9", "xr10"
+        from "s14" as tmp1,"r24" as tmp2
+        where "fk" in %s and tmp1."fk"=tmp2."rid" order by "rid", "sid";"""
+
+NR_24 = """select * from "r32";"""
+N_24 = """select * from "s14";"""
+mu_24 = """select  avg("xs1"), avg("xs2"), avg("xr1"), avg("xr2"), avg("xr3"), avg("xr4"), avg("xr5"),
+          avg("xr6"), avg("xr7"), avg("xr8"), avg("xr9"), avg("xr10"), avg("xr11"), avg("xr12"), avg("xr13"),
+          avg("xr14")from (select * from "s14" join "r32" on "s14"."fk"= "r32"."rid") as tmp;"""
+R_24 = """select "rid" from "r32" ;"""
+b_24 = """select "xs1", "xs2", "rid", "xr1", "xr2", "xr3", "xr4", "xr5" , "xr6", "xr7", "xr8", "xr9", "xr10",
+          "xr11", "xr12", "xr13", "xr14"
+           from "s14" as tmp1,"r32" as tmp2
+       where "fk" in %s and tmp1."fk"=tmp2."rid" order by "rid", "sid";"""
+
+NR_25 = """select * from "r33";"""
+N_25 = """select * from "s14";"""
+mu_25 = """select  avg("xs1"), avg("xs2"), avg("xr1"), avg("xr2"), avg("xr3"), avg("xr4"), avg("xr5"),
+          avg("xr6"), avg("xr7"), avg("xr8"), avg("xr9"), avg("xr10"), avg("xr11"), avg("xr12"), avg("xr13"),
+          avg("xr14"),avg("xr15"), avg("xr16"), avg("xr17"), avg("xr18")
+          from (select * from "s14" join "r33" on "s14"."fk"= "r33"."rid") as tmp;"""
+R_25 = """select "rid" from "r33" ;"""
+b_25 = """select "xs1", "xs2", "rid", "xr1", "xr2", "xr3", "xr4", "xr5" , "xr6", "xr7", "xr8", "xr9", "xr10",
+          "xr11", "xr12", "xr13", "xr14","xr15", "xr16", "xr17", "xr18"
+          from "s14" as tmp1,"r33" as tmp2
+        where "fk" in %s and tmp1."fk"=tmp2."rid" order by "rid", "sid";"""
+NR_sql_list = [NR_1, NR_2, NR_3, NR_4, NR_5, NR_6, NR_7, NR_8, NR_9, NR_10, NR_11, NR_12, NR_13, NR_14, NR_15, NR_16,
+               NR_17, NR_18, NR_19, NR_20, NR_21, NR_22, NR_23, NR_24, NR_25]
+N_sql_list = [N_1, N_2, N_3, N_4, N_5, N_6, N_7, N_8, N_9, N_10, N_11, N_12, N_13, N_14, N_15, N_16, N_17, N_18, N_19,
+              N_20, N_21, N_22, N_23, N_24, N_25]
+mu_sql_list = [mu_1, mu_2, mu_3, mu_4, mu_5, mu_6, mu_7, mu_8, mu_9, mu_10, mu_11, mu_12, mu_13, mu_14, mu_15, mu_16,
+               mu_17, mu_18, mu_19, mu_20, mu_21, mu_22, mu_23, mu_24, mu_25]
+R_sql_list = [R_1, R_2, R_3, R_4, R_5, R_6, R_7, R_8, R_9, R_10, R_11, R_12, R_13, R_14, R_15, R_16, R_17, R_18, R_19,
+              R_20, R_21, R_22, R_23, R_24, R_25]
+b_sql_list = [b_1, b_2, b_3, b_4, b_5, b_6, b_7, b_8, b_9, b_10, b_11, b_12, b_13, b_14, b_15, b_16, b_17, b_18, b_19,
+              b_20, b_21, b_22, b_23, b_24, b_25]
+
+D_list = [4, 8, 12, 16, 20, 4, 8, 12, 16, 20, 4, 8, 12, 16, 20, 4, 8, 12, 16, 20, 4, 8, 12, 16, 20]
 runtime_list = []
 cputime_list = []
 fetchdatatime_list = []
 calculatetime_list = []
+NR_b_list = [25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25]
 
-
-NR_b_list = [25,25,25,25,25]
-
-for i in range(4,len(NR_sql_list)):
+for i in range(20, len(NR_sql_list)):
     print("i=", i)
     runtime_start = time.time()
     # cpu_start = time.process_time()
