@@ -64,7 +64,7 @@ def fetch_data(cursorR, sql_S, NR_b, DR):
     return data_XR_b, data_XS_b_FK
 
 
-def iterate_and_calculate(sql_R, sql_S, D, DS, DR, NR_b, W, Sigma, max_iter):
+def iterate_and_calculate(sql_R, sql_S, D, P, DS, DR, NR_b, W, Sigma, max_iter):
     fetch_sum = 0
     calculate_sum = 0
 
@@ -144,9 +144,6 @@ def iterate_and_calculate(sql_R, sql_S, D, DS, DR, NR_b, W, Sigma, max_iter):
     return fetch_sum, calculate_sum
 
 
-
-
-
 NR_1 = """select * from "r25";"""
 NS_1 = """select * from "s5";"""
 muS_1 = """select avg("xs1"), avg("xs2") from "s5";"""
@@ -154,29 +151,28 @@ muR_1 = """select sum("r25"."xr1" * tmp.CNT), sum("r25"."xr2" * tmp.CNT), sum("r
 , sum("r25"."xr4" * tmp.CNT), sum("r25"."xr5" * tmp.CNT), sum("r25"."xr6" * tmp.CNT)
            from "r25" join (select "s5"."fk", count(*) as CNT from "s5" GROUP BY "s5"."fk") as tmp
             on "r25"."rid" = tmp."fk";"""
-R_1 = """select "rid","xr1", "xr2","xr3", "xr4", "xr5"
+R_1 = """select "rid","xr1", "xr2","xr3", "xr4", "xr5", "xr6"
        from "r25" order by "rid";"""
 S_1 = """select  "xs1","xs2", "fk" from "s5" where "fk" in %s order by "fk"; """
 
+NR_sql_list = [NR_1, NR_1, NR_1, NR_1, NR_1]
+NS_sql_list = [NS_1, NS_1, NS_1, NS_1, NS_1]
+muS_sql_list = [muS_1, muS_1, muS_1, muS_1, muS_1]
+muR_sql_list = [muR_1, muR_1, muR_1, muR_1, muR_1]
+R_sql_list = [R_1, R_1, R_1, R_1, R_1]
+S_sql_list = [S_1, S_1, S_1, S_1, S_1]
 
-
-NR_sql_list = [NR_1, NR_2, NR_3, NR_4, NR_5]
-NS_sql_list = [NS_1, NS_2, NS_3, NS_4, NS_5]
-muS_sql_list = [muS_1, muS_2, muS_3, muS_4, muS_5]
-muR_sql_list = [muR_1, muR_2, muR_3, muR_4, muR_5]
-R_sql_list = [R_1, R_2, R_3, R_4, R_5]
-S_sql_list = [S_1, S_2, S_3, S_4, S_5]
-
-D_list = [4, 8, 12, 16, 20]
+D_list = [8, 8, 8, 8, 8]
 DS_list = [2, 2, 2, 2, 2]
-DR_list = [2, 6, 10, 14, 18]
+DR_list = [6, 6, 6, 6, 6]
 NR_b_list = [25, 25, 25, 25, 25]
+P_list = [2, 3, 4, 5, 6]
 
 runtime_list = []
 cputime_list = []
 fetchdatatime_list = []
 calculatetime_list = []
-for i in range( len(NR_sql_list)):
+for i in range(1,len(P_list)):
     print("i=", i)
     runtime_start = time.time()
     # cpu_start = time.process_time()
@@ -186,26 +182,25 @@ for i in range( len(NR_sql_list)):
                             port="5432")
     NR, NS, muS, muR = fetch_count_mu(NR_sql_list[i], NS_sql_list[i], muS_sql_list[i], muR_sql_list[i])
 
-    P = 3
     total_batch = ceil(NR / NR_b_list[i])
     preparation_end = time.time()
     preparation_time = preparation_end - preparation_start
     print("Prepare for FPPCA:", (preparation_end - preparation_start))
     np.random.seed(2)
-    W = np.random.rand(D_list[i], P)
+    W = np.random.rand(D_list[i], P_list[i])
     Sigma = 1
     max_iter = 10
-    fetch_sum, calculate_sum = iterate_and_calculate(sql_R=R_sql_list[i], sql_S=S_sql_list[i], D=D_list[i],
+    fetch_sum, calculate_sum = iterate_and_calculate(sql_R=R_sql_list[i], sql_S=S_sql_list[i], D=D_list[i], P=P_list[i],
                                                      DS=DS_list[i], DR=DR_list[i], NR_b=NR_b_list[i], W=W,
                                                      Sigma=Sigma, max_iter=max_iter)
     conn.close()
 
     runtime_end = time.time()
     # cpu_end = time.process_time()
-    print("runtime of FPPCA for ", i, " cases:", (runtime_end - runtime_start))
+    print("runtime of FPPCA for P=", i, (runtime_end - runtime_start))
     # print("cpu of FPPCA for ", i, " cases:", (cpu_end - cpu_start))
-    print("fetch data time of FPPCA for ", i, " cases:", fetch_sum + preparation_time)
-    print("calculate time of FPPCA for ", i, " cases:", calculate_sum)
+    print("fetch data time of FPPCA for P=", i, fetch_sum + preparation_time)
+    print("calculate time of FPPCA for P=", i, calculate_sum)
     runtime_list.append(runtime_end - runtime_start)
     # cputime_list.append(cpu_end - cpu_start)
     fetchdatatime_list.append(fetch_sum + preparation_time)

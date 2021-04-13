@@ -207,7 +207,7 @@ fetchdatatime_list = []
 calculatetime_list = []
 NR_b_list = [25, 25, 25, 25]
 
-for i in range(len(NR_sql_list)):
+for i in range(2,len(NR_sql_list)):
     print("i=", i)
     runtime_start = time.time()
     # cpu_start = time.process_time()
